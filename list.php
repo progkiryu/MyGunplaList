@@ -9,7 +9,7 @@
     <body>
         <?php
         session_start();
-        if (isset($_SESSION["username"])) echo "<h1>Welcome, " . $_SESSION["username"] . " to your Gunpla list!</h1>";
+        if (isset($_SESSION["username"])) echo "<h1>Welcome " . $_SESSION["username"] . ", to your Gunpla list!</h1>";
         else {
             session_unset();
             session_destroy();
@@ -30,10 +30,7 @@
         <?php
         require_once "sqlConnection.php";
         $tableName = $_SESSION["username"] . "_gunpla";
-
-        function refreshDisplay() {
-        }
-        $tableQuery = "SELECT Grade, Scale, ModelName, DateBuilt FROM '$tableName'";
+        $tableQuery = "SELECT Grade, Scale, ModelName, DateBuilt FROM $tableName";
         $tableResult = mysqli_query($connection, $tableQuery);
 
         if ($tableResult) {
@@ -47,8 +44,6 @@
                     </tr>';
             }
         }
-
-        refreshDisplay();
         ?>
 
         </table>
@@ -116,7 +111,6 @@
             if (!$error) {
                 $newGunplaQuery = "INSERT INTO $tableName (Grade, Scale, ModelName, DateBuilt) VALUES ('$gradeSelector', '$scaleSelector', '$modelName', '$dateBuilt')";
                 mysqli_query($connection, $newGunplaQuery);
-                refreshDisplay();
             }
         }
         ?>
