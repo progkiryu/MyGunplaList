@@ -1,2 +1,2 @@
 # MyGunplaList
-to view ur built gunplas :)
+to see ur built gunplas :)
