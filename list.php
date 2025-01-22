@@ -40,9 +40,12 @@
                         <td>' . $row["Scale"] . '</td>
                         <td>' . $row["ModelName"] . '</td>
                         <td>' . $row["DateBuilt"] . '</td>
-                        <td><form action=' . htmlspecialchars($_SERVER["PHP_SELF"]) . ' method="post"><button name="deleteButton" value=' . $row["ModelName"] . '>Delete</button></form></td>
+                        <td>
+                            <form action=' . $_SERVER["PHP_SELF"] . ' method="post">
+                                <button name="deleteButton" value=' . urlencode($row["ModelName"]) . '>Delete</button>
+                            </form>
+                        </td>
                     </tr>';
-                echo $row["ModelName"];
             }
         }
         ?>
@@ -98,8 +101,7 @@
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (isset($_POST["deleteButton"])) {
-                $deleteRow = $_POST["deleteButton"];
-                echo $deleteRow;
+                $deleteRow = urldecode($_POST["deleteButton"]);
                 $deleteGunplaQuery = "DELETE FROM $tableName WHERE ModelName = '$deleteRow'";
                 mysqli_query($connection, $deleteGunplaQuery);
                 header("Refresh: 0");
