@@ -40,8 +40,9 @@
                         <td>' . $row["Scale"] . '</td>
                         <td>' . $row["ModelName"] . '</td>
                         <td>' . $row["DateBuilt"] . '</td>
-                        <td><button onclick="displayGunpla()">Delete</button>
+                        <td><form action=' . htmlspecialchars($_SERVER["PHP_SELF"]) . ' method="post"><button name="deleteButton" value=' . $row["ModelName"] . '>Delete</button></form></td>
                     </tr>';
+                echo $row["ModelName"];
             }
         }
         ?>
@@ -58,7 +59,7 @@
 
         <div id="addGunplaDisplay" hidden="hidden">
             <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post">
-                <select name="gradeSelector" id="gradeSelector">
+                <select name="gradeSelector">
                     <option value="SD">SD</option>
                     <option value="HG">HG</option>
                     <option value="RG">RG</option>
@@ -69,16 +70,16 @@
                     <option value="HIRM">HIRM</option>
                     <option value="FM">FM</option>
                 </select>
-                <select name="scaleSelector" id="scaleSelector">
+                <select name="scaleSelector">
                     <option value="1/144">1/144</option>
                     <option value="1/100">1/100</option>
                     <option value="1/60">1/60</option>
                     <option value="1/35">1/35</option>
                     <option value="N/A">N/A</option>
                 </select>
-                <input type="text" name="modelName" id="scaleSelector" placeholder="Model Name:">
-                <input type="date" name="dateBuilt" id="dateBuilt">
-                <button onclick="addGunpla()">Enter</button>
+                <input type="text" name="modelName" placeholder="Model Name:">
+                <input type="date" name="dateBuilt">
+                <button>Enter</button>
             </form>
         </div>
 
@@ -95,7 +96,17 @@
             exit;
         }
 
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {  
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if (isset($_POST["deleteButton"])) {
+                $deleteRow = $_POST["deleteButton"];
+                echo $deleteRow;
+                $deleteGunplaQuery = "DELETE FROM $tableName WHERE ModelName = '$deleteRow'";
+                mysqli_query($connection, $deleteGunplaQuery);
+                header("Refresh: 0");
+                die;
+            }
+            echo "haha";
+
             $gradeSelector = htmlspecialchars($_POST["gradeSelector"]);
             $scaleSelector = htmlspecialchars($_POST["scaleSelector"]);
             $modelName = htmlspecialchars($_POST["modelName"]);
@@ -111,6 +122,7 @@
             if (!$error) {
                 $newGunplaQuery = "INSERT INTO $tableName (Grade, Scale, ModelName, DateBuilt) VALUES ('$gradeSelector', '$scaleSelector', '$modelName', '$dateBuilt')";
                 mysqli_query($connection, $newGunplaQuery);
+                header("Refresh: 0");
             }
         }
         ?>

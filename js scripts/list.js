@@ -11,6 +11,3 @@ function toggleDisplay(button) {
     }
 }
 
-function deleteGunpla() {
-    
-}
