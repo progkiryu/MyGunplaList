@@ -50,9 +50,12 @@
             $checkQuery = "SELECT * FROM Users WHERE Username = '$newUsername'";
             $checkResult = mysqli_query($connection, $checkQuery);
             if ($checkResult) {
-                echo "<h2>Username already taken!</h2>";
-                $error = true;
-            }
+                $checkRow = mysqli_fetch_row($checkResult);
+                if ($checkRow) {
+                    echo "<h2>Username already taken!</h2>";
+                    $error = true;
+                }
+            } else die("<h2>SQL ERROR!</h2>");
             
             if (!$error) {
                 $newUserQuery = "INSERT INTO Users (Username, Password) VALUES ('$newUsername', '$newPassword')";

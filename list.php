@@ -18,15 +18,7 @@
         }
         ?>
 
-        <table>
-            <tr>
-                <th>Grade</th>
-                <th>Scale</th>
-                <th>Model Name</th>
-                <th>Date Built</th>
-                <th></th>
-            </tr>
-
+        <!-- Loads in gunpla data for each user -->
         <?php
         require_once "sqlConnection.php";
         $tableName = $_SESSION["username"] . "_gunpla";
@@ -34,23 +26,40 @@
         $tableResult = mysqli_query($connection, $tableQuery);
 
         if ($tableResult) {
-            while ($row = $tableResult -> fetch_assoc()) {
-                echo '<tr>
-                        <td>' . $row["Grade"] . '</td>
-                        <td>' . $row["Scale"] . '</td>
-                        <td>' . $row["ModelName"] . '</td>
-                        <td>' . $row["DateBuilt"] . '</td>
-                        <td>
-                            <form action=' . $_SERVER["PHP_SELF"] . ' method="post">
-                                <button name="deleteButton" value=' . urlencode($row["ModelName"]) . '>Delete</button>
-                            </form>
-                        </td>
-                    </tr>';
-            }
+            if (mysqli_num_rows($tableResult) != 0) {
+                echo '<table>
+                        <tr>
+                            <th>Grade</th>
+                            <th>Scale</th>
+                            <th>Model Name</th>
+                            <th>Date Built</th>
+                            <th>Image</th>
+                            <th></th>
+                        </tr>';
+                while ($tableRow = $tableResult -> fetch_assoc()) {
+                    echo '<tr>
+                            <td>
+                                <div>' . 
+                                    $tableRow["Grade"] . 
+                                '</div>
+                                <input id="editGradeButton" hidden="hidden" type="text" value="' . urlencode($tableRow["Grade"]) . '">
+                            </td>
+                            <td>' . $tableRow["Scale"] . '</td>
+                            <td>' . $tableRow["ModelName"] . '</td>
+                            <td>' . $tableRow["DateBuilt"] . '</td>
+                            <td> none for now! </td>
+                            <td>
+                                <form action="' . $_SERVER["PHP_SELF"] . '" method="post">
+                                    <button name="deleteButton" value="' . urlencode($tableRow["ModelName"]) . '">Delete</button>
+                                    <button name="editButton" value="' . urlencode($tableRow["ModelName"]) . '">Edit</button>
+                                </form>
+                            </td>
+                        </tr>';
+                }
+                echo '</table>';
+            } else echo '<h2>No gunpla, add some!</h2>';
         }
         ?>
-
-        </table>
 
         <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="get">
             <button name="settingsButton">Settings</button>
@@ -82,6 +91,7 @@
                 </select>
                 <input type="text" name="modelName" placeholder="Model Name:">
                 <input type="date" name="dateBuilt">
+                <input type="file" name="photos" multiple>
                 <button>Enter</button>
             </form>
         </div>
@@ -105,9 +115,13 @@
                 $deleteGunplaQuery = "DELETE FROM $tableName WHERE ModelName = '$deleteRow'";
                 mysqli_query($connection, $deleteGunplaQuery);
                 header("Refresh: 0");
-                die;
+                exit;
             }
-            echo "haha";
+            if (isset($_POST["editButton"])) {
+                $editRow = urldecode($_POST["editButton"]);
+                header("Refresh: 0");
+                exit;
+            }
 
             $gradeSelector = htmlspecialchars($_POST["gradeSelector"]);
             $scaleSelector = htmlspecialchars($_POST["scaleSelector"]);
@@ -125,6 +139,7 @@
                 $newGunplaQuery = "INSERT INTO $tableName (Grade, Scale, ModelName, DateBuilt) VALUES ('$gradeSelector', '$scaleSelector', '$modelName', '$dateBuilt')";
                 mysqli_query($connection, $newGunplaQuery);
                 header("Refresh: 0");
+                exit;
             }
         }
         ?>
