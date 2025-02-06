@@ -10,4 +10,3 @@ function toggleDisplay(button) {
         button.innerText = "Close";
     }
 }
-

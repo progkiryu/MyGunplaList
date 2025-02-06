@@ -91,7 +91,7 @@
                 </select>
                 <input type="text" name="modelName" placeholder="Model Name:">
                 <input type="date" name="dateBuilt">
-                <input type="file" name="photos" multiple>
+                <input type="file" name="photos" value="" multiple>
                 <button>Enter</button>
             </form>
         </div>
@@ -136,8 +136,16 @@
             } 
 
             if (!$error) {
-                $newGunplaQuery = "INSERT INTO $tableName (Grade, Scale, ModelName, DateBuilt) VALUES ('$gradeSelector', '$scaleSelector', '$modelName', '$dateBuilt')";
+                $gunplaFolder = $username . "'s photos";
+
+                $newGunplaQuery = "INSERT INTO $tableName (Grade, Scale, ModelName, DateBuilt) VALUES ( '$modelName', '$gradeSelector', '$scaleSelector', '$dateBuilt', '$gunplaFolder')";
                 mysqli_query($connection, $newGunplaQuery);
+                
+                $newDirectory = __DIR__ . "/gundam photos/" . $gunplaFolder . "/" . $modelName;
+                if (!is_dir($newDirectory)) {
+                    mkdir($newDirectory, 0777, true);
+                } else die("<h2>DIRECTORY ERROR!</h2>");
+
                 header("Refresh: 0");
                 exit;
             }

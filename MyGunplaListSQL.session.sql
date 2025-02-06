@@ -1,1 +1,1 @@
-SELECT * FROM kazuma_gunpla;
+SELECT * FROM users;

@@ -64,13 +64,20 @@
                 $newTableName = $newUsername . "_gunpla";
                 $newGundamQuery = "CREATE TABLE $newTableName (
                     GunplaID INT NOT NULL AUTO_INCREMENT,
+                    ModelName VARCHAR(255) NOT NULL,
                     Grade VARCHAR(4),
                     Scale VARCHAR(5),
-                    ModelName VARCHAR(255),
                     DateBuilt DATE,
-                    CONSTRAINT PK_$newTableName PRIMARY KEY (GunplaID)
+                    ImageFolder VARCHAR(255),
+                    CONSTRAINT PK_$newTableName PRIMARY KEY (GunplaID, ModelName)
                 )";
                 mysqli_query($connection, $newGundamQuery);
+
+                $newFolder = $newUsername . "'s photos";
+                $currentDirectory = __DIR__ . "/gundam photos/" . $newFolder;
+                if (!is_dir($currentDirectory)) {
+                    mkdir($currentDirectory, 0777, true);
+                } else die("<h2>DIRECTORY ERROR!</h2>");
 
                 session_start();
                 $_SESSION["username"] = $newUsername;
