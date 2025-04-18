@@ -18,76 +18,6 @@
         }
         ?>
 
-        <!-- Loads in gunpla data for each user -->
-        <?php
-        require_once "sqlConnection.php";
-        $tableName = $_SESSION["username"] . "_gunpla";
-        $tableQuery = "SELECT Grade, Scale, ModelName, DateBuilt, ImageFileName FROM $tableName";
-        $tableResult = mysqli_query($connection, $tableQuery);
-
-        if ($tableResult) {
-            if (mysqli_num_rows($tableResult) != 0) {
-                echo '<table>
-                        <tr>
-                            <th>Grade</th>
-                            <th>Scale</th>
-                            <th>Model Name</th>
-                            <th>Date Built</th>
-                            <th>Image</th>
-                            <th></th>
-                        </tr>';
-                while ($tableRow = $tableResult -> fetch_assoc()) {
-                    echo '<tr>
-                            <td>
-                                <div>' . $tableRow["Grade"] . '</div>
-                                <select id="gradeSelector" hidden="hidden">
-                                    <option value="SD">SD</option>
-                                    <option value="HG">HG</option>
-                                    <option value="RG">RG</option>
-                                    <option value="MG">MG</option>
-                                    <option value="MGEX">MGEX</option>
-                                    <option value="PG">PG</option>
-                                    <option value="MS">MS</option>
-                                    <option value="HIRM">HIRM</option>
-                                    <option value="FM">FM</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div>' . $tableRow["Scale"] . '</div>
-                                <select id="scaleSelector" hidden="hidden">
-                                    <option value="1/144">1/144</option>
-                                    <option value="1/100">1/100</option>
-                                    <option value="1/60">1/60</option>
-                                    <option value="1/35">1/35</option>
-                                    <option value="N/A">N/A</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div>' . $tableRow["ModelName"] . '</div>
-                                <input id=
-                            </td>
-                            <td>
-                                <div>' . $tableRow["DateBuilt"] . '</div>
-                            </td>
-                            <td>
-                                <form action="' . $_SERVER["PHP_SELF"] . '" method="post">
-                                    <input type="file" name="photos" value="" accept=".png, .jpeg, .jpg">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="' . $_SERVER["PHP_SELF"] . '" method="post">
-                                    <button name="deleteButton" value="' . urlencode($tableRow["ModelName"]) . '">Delete</button>
-                                    <button id="editButton" onclick="toggleEdit(this)" value="' . urlencode($tableRow["ModelName"]) . '">Edit</button>
-                                    <bu
-                                </form>
-                            </td>
-                        </tr>';
-                }
-                echo '</table>';
-            } else echo '<h2>No gunpla, add some!</h2>';
-        }
-        ?>
-
         <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="get">
             <button name="settingsButton">Settings</button>
             <button name="loginButton">Logout</button>
@@ -118,23 +48,12 @@
                 </select>
                 <input type="text" name="modelName" placeholder="Model Name:">
                 <input type="date" name="dateBuilt">
-                <input type="file" name="photo" value="" accept=".png, .jpeg, .jpg">
+                <input type="file" name="photo" accept=".png, .jpeg, .jpg">
                 <button>Enter</button>
             </form>
         </div>
 
         <?php
-        if (isset($_GET["loginButton"])) {
-            session_unset();
-            session_destroy();
-            header("Location: login.php");
-            exit;
-        }
-
-        if (isset($_GET["settingsButton"])) {
-            header("Location: settings.php");
-            exit;
-        }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (isset($_POST["deleteButton"])) {
@@ -172,6 +91,30 @@
             }
         }
         ?>
-        <script src="js scripts/list.js"></script>
+        <script src="scripts/list.js"></script>
     </body>
 </html>
+
+<?php
+
+require_once "../controllers/list.con.php";
+require_once "../controllers/user.con.php";
+
+$listController = new ListController();
+$userController = new UserController();
+
+if (isset($_GET["loginButton"])) {
+    $userController->logout();
+}
+
+if (isset($_GET["settingsButton"])) {
+    header("Location: settings.php");
+    exit;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["deleteButton"])) {
+        $listController->removeGunpla();
+        exit;
+    }
+} 

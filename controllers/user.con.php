@@ -9,7 +9,7 @@ class UserController {
         $this->userModel = new User();
     }
 
-    public function login() {
+    public function loginUser() {
         $username = htmlspecialchars($_POST["username"]);
         $password = htmlspecialchars($_POST["password"]);
 
@@ -26,7 +26,7 @@ class UserController {
             if ($result) {
                 session_start();
                 $_SESSION["username"] = $username;
-                header("Location: list.view.php");
+                header("Location: list.php");
                 exit;
             }
             else {
@@ -35,7 +35,7 @@ class UserController {
         }
     }
 
-    public function register() {
+    public function registerUser() {
         $username = htmlspecialchars($_POST["newUsername"]);
         $password = htmlspecialchars($_POST["newPassword"]);
         $repeatPassword = htmlspecialchars($_POST["repeatPassword"]);
@@ -64,12 +64,19 @@ class UserController {
             if ($result && $tableResult) {
                 session_start();
                 $_SESSION["username"] = $username;
-                header("Location: list.view.php");
+                header("Location: list.php");
                 exit;
             }
             else {
                 die("<h2>SQL Error!</h2>");
             }
         }
+    }
+
+    public function logout() {
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+        exit;
     }
 }

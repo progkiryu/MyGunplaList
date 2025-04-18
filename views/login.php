@@ -29,5 +29,5 @@ require_once "../controllers/user.con.php";
 $controller = new UserController();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $controller->login();
+    $controller->loginUser();
 }

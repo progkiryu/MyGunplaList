@@ -50,4 +50,8 @@ class User {
         return false;
     }
 
+    public function delete($username) {
+        $statement = $this->database->prepare("DELETE * FROM Users WHERE Username = ?");
+        return $statement->execute([$username]);
+    }
 }
