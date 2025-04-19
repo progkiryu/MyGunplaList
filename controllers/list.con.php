@@ -10,6 +10,7 @@ class ListController {
     }
 
     public function addGunpla() {
+        session_start();
         $gradeSelector = htmlspecialchars($_POST["gradeSelector"]);
         $scaleSelector = htmlspecialchars($_POST["scaleSelector"]);
         $modelName = htmlspecialchars($_POST["modelName"]);
@@ -25,7 +26,7 @@ class ListController {
 
         if (!$error) {
             $result = $this->listModel->add($gradeSelector, $scaleSelector, $modelName, 
-            $dateBuilt, NULL);
+            $dateBuilt, NULL, $_SESSION["username"]);
             if ($result) {
                 exit;
             }
@@ -36,8 +37,9 @@ class ListController {
     }
 
     public function removeGunpla() {
+        session_start();
         $deleteRow = urldecode($_POST["deleteButton"]);
-        $result = $this->listModel->remove($deleteRow);
+        $result = $this->listModel->remove($deleteRow, $_SESSION["username"]);
         if ($result) {
             exit;
         }

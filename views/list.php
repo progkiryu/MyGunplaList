@@ -49,48 +49,10 @@
                 <input type="text" name="modelName" placeholder="Model Name:">
                 <input type="date" name="dateBuilt">
                 <input type="file" name="photo" accept=".png, .jpeg, .jpg">
-                <button>Enter</button>
+                <button name="addButton">Enter</button>
             </form>
         </div>
 
-        <?php
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if (isset($_POST["deleteButton"])) {
-                $deleteRow = urldecode($_POST["deleteButton"]);
-                $deleteGunplaQuery = "DELETE FROM $tableName WHERE ModelName = '$deleteRow'";
-                mysqli_query($connection, $deleteGunplaQuery);
-                header("Refresh: 0");
-                exit;
-            }
-            if (isset($_POST["editButton"])) {
-                $editRow = urldecode($_POST["editButton"]);
-                header("Refresh: 0");
-                exit;
-            }
-
-            $gradeSelector = htmlspecialchars($_POST["gradeSelector"]);
-            $scaleSelector = htmlspecialchars($_POST["scaleSelector"]);
-            $modelName = htmlspecialchars($_POST["modelName"]);
-            $dateBuilt = $_POST["dateBuilt"];
-
-            $error = false;
-
-            if (empty($gradeSelector) || empty($scaleSelector) || empty($modelName) || empty($dateBuilt)) {
-                echo "<h2>Fill in the fields!</h2>";
-                $error = true;
-            } 
-
-            if (!$error) {
-                $newGunplaQuery = "INSERT INTO $tableName (Grade, Scale, ModelName, DateBuilt, ImageFileName) VALUES ('$gradeSelector', '$scaleSelector', '$modelName', '$dateBuilt', NULL)";
-                mysqli_query($connection, $newGunplaQuery);
-                
-
-                header("Refresh: 0");
-                exit;
-            }
-        }
-        ?>
         <script src="scripts/list.js"></script>
     </body>
 </html>
@@ -115,6 +77,9 @@ if (isset($_GET["settingsButton"])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["deleteButton"])) {
         $listController->removeGunpla();
-        exit;
+    }
+
+    if (isset($_POST["addButton"])) {
+        $listController->addGunpla();
     }
 } 

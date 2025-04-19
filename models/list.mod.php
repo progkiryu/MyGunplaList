@@ -9,8 +9,8 @@ class ListModel {
         $this->database = Database::connect();
     }
 
-    public function add($grade, $scale, $modelName, $dateBuilt, $file) {
-        $tableName = $_SESSION["Username"] . "_gunpla";
+    public function add($grade, $scale, $modelName, $dateBuilt, $file, $username) {
+        $tableName = $username . "_gunpla";
         $newGunplaQuery = "INSERT INTO $tableName 
         (Grade, Scale, ModelName, DateBuilt, ImageFileName) VALUES 
         (?, ?, ?, ?, ?)";
@@ -18,14 +18,14 @@ class ListModel {
         return $statement->execute([$grade, $scale, $modelName, $dateBuilt, $file]);
     }
 
-    public function remove($rowID) {
-        $tableName = $_SESSION["Username"] . "_gunpla";
+    public function remove($rowID, $username) {
+        $tableName = $username . "_gunpla";
         $deleteGunplaQuery = "DELETE FROM $tableName WHERE ModelName = ?";
         $statement = $this->database->prepare($deleteGunplaQuery);
         return $statement->execute([$rowID]);
     }
 
     public function changeGunpla() {
-
+        echo "una yaha yaha una!";
     }
 }
