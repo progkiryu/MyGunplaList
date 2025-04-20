@@ -35,10 +35,7 @@ class ListController {
     public function deleteGunpla() {
         $deleteRow = urldecode($_POST["deleteButton"]);
         $result = $this->listModel->remove($deleteRow);
-        if ($result) {
-            exit;
-        }
-        else {
+        if (!$result) {
             die("<h2>SQL Error!</h2>");
         }
     }
@@ -65,7 +62,6 @@ class ListController {
                 echo $row;
             }
             echo "</table>";
-            exit;
         }
         else {
             die("<h2>No gunpla! Add some!</h2>");

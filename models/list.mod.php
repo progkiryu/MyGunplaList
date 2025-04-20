@@ -44,13 +44,19 @@ class ListModel {
                 if (is_null($image)) {
                     $image = "No image!";
                 }
-                $line = "<tr>
-                            <td>" . $row['Grade'] . "</td>
-                            <td>" . $row['Scale'] . "</td>
-                            <td>" . $row['ModelName'] . "</td>
-                            <td>" . $row['DateBuilt'] . "</td>
-                            <td>" . $image . "</td>
-                        </tr>";
+                $line = '<tr>
+                            <td>' . $row['Grade'] . '</td>
+                            <td>' . $row['Scale'] . '</td>
+                            <td>' . $row['ModelName'] . '</td>
+                            <td>' . $row['DateBuilt'] . '</td>
+                            <td>' . $image . '</td>
+                            <td>
+                                <form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="post">
+                                    <button name="deleteButton" value="' . urlencode($row['ModelName']) . '">Delete</button>
+                                    <button name="changeButton" value="' . urlencode($row['ModelName']) . '">Edit</button>
+                                </form>
+                            </td>
+                        </tr>';
                 $array[] = $line;
             }
         }

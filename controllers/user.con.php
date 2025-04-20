@@ -22,7 +22,6 @@ class UserController {
         
         if (!$error) {
             $result = $this->userModel->checkUser($username, $password);
-            echo $result;
             if ($result) {
                 session_start();
                 $_SESSION["username"] = $username;
@@ -30,7 +29,7 @@ class UserController {
                 exit;
             }
             else {
-                die("<h2>SQL Error!</h2>");
+                die("<h2>Invalid credentials!</h2>");
             }
         }
     }

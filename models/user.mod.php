@@ -33,7 +33,7 @@ class User {
             Grade VARCHAR(4),
             Scale VARCHAR(5),
             DateBuilt DATE,
-            ImageFolder VARCHAR(255),
+            ImageFileName VARCHAR(255),
             CONSTRAINT PK_$newTableName PRIMARY KEY (GunplaID, ModelName)
         )";
         $statement = $this->database->prepare($query);
