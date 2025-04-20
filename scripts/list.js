@@ -4,9 +4,9 @@ function toggleDisplay(button) {
 
     if (hidden) {
         section.removeAttribute("hidden");
-        button.innerText = "Add Gunpla";
+        button.innerText = "Close";
     } else {
         section.setAttribute("hidden", "hidden");
-        button.innerText = "Close";
+        button.innerText = "Add Gunpla";
     }
 }

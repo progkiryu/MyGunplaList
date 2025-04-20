@@ -9,7 +9,7 @@ class User {
         $this->database = Database::connect();
     }
 
-    public function login($username, $password) {
+    public function checkUser($username, $password) {
         $statement = $this->database->prepare("SELECT * FROM Users WHERE Username = ?");
         $statement->execute([$username]);
         $user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -19,7 +19,7 @@ class User {
         return false;
     }
 
-    public function register($username, $password) {
+    public function insert($username, $password) {
         $statement = $this->database->prepare("INSERT INTO Users (Username, Password) VALUES 
         (?, ?)");
         return $statement->execute([$username, $password]);
@@ -40,7 +40,7 @@ class User {
         return $statement->execute();
     }
 
-    public function checkUser($username) {
+    public function checkUsername($username) {
         $statement = $this->database->prepare("SELECT * FROM Users WHERE Username = ?");
         $statement->execute([$username]);
         $user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -50,8 +50,8 @@ class User {
         return false;
     }
 
-    public function delete($username) {
-        $statement = $this->database->prepare("DELETE * FROM Users WHERE Username = ?");
+    public function remove($username) {
+        $statement = $this->database->prepare("DELETE FROM Users WHERE Username = ?");
         return $statement->execute([$username]);
     }
 }

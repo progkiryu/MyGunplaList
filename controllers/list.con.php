@@ -6,11 +6,10 @@ class ListController {
     private $listModel;
 
     public function __construct() {
-        $this->listModel = new ListModel();
+        $this->listModel = new ListModel($_SESSION["username"]);
     }
 
     public function addGunpla() {
-        session_start();
         $gradeSelector = htmlspecialchars($_POST["gradeSelector"]);
         $scaleSelector = htmlspecialchars($_POST["scaleSelector"]);
         $modelName = htmlspecialchars($_POST["modelName"]);
@@ -26,20 +25,16 @@ class ListController {
 
         if (!$error) {
             $result = $this->listModel->add($gradeSelector, $scaleSelector, $modelName, 
-            $dateBuilt, NULL, $_SESSION["username"]);
-            if ($result) {
-                exit;
-            }
-            else {
+            $dateBuilt, NULL);
+            if (!$result) {
                 die("<h2>SQL Error!</h2>");
             }
         }
     }
 
-    public function removeGunpla() {
-        session_start();
+    public function deleteGunpla() {
         $deleteRow = urldecode($_POST["deleteButton"]);
-        $result = $this->listModel->remove($deleteRow, $_SESSION["username"]);
+        $result = $this->listModel->remove($deleteRow);
         if ($result) {
             exit;
         }
@@ -47,4 +42,33 @@ class ListController {
             die("<h2>SQL Error!</h2>");
         }
     }
+
+    public function deleteTable() {
+        $result = $this->listModel->removeTable();
+        if (!$result) {
+            die("<h2>SQL Error!</h2>");
+        }
+    }
+
+    public function displayGunpla() {
+        $result = $this->listModel->getAll();
+        if ($result) {
+            echo "<table>  
+                    <tr>
+                        <th>Grade</th>
+                        <th>Scale</th>
+                        <th>ModelName</th>
+                        <th>DateBuilt</th>
+                        <th>Image</th>
+                    </tr>";
+            foreach ($result as $row) {
+                echo $row;
+            }
+            echo "</table>";
+            exit;
+        }
+        else {
+            die("<h2>No gunpla! Add some!</h2>");
+        }
+    }   
 }

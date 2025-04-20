@@ -9,7 +9,7 @@ class UserController {
         $this->userModel = new User();
     }
 
-    public function loginUser() {
+    public function login() {
         $username = htmlspecialchars($_POST["username"]);
         $password = htmlspecialchars($_POST["password"]);
 
@@ -21,7 +21,7 @@ class UserController {
         }
         
         if (!$error) {
-            $result = $this->userModel->login($username, $password);
+            $result = $this->userModel->checkUser($username, $password);
             echo $result;
             if ($result) {
                 session_start();
@@ -35,7 +35,7 @@ class UserController {
         }
     }
 
-    public function registerUser() {
+    public function register() {
         $username = htmlspecialchars($_POST["newUsername"]);
         $password = htmlspecialchars($_POST["newPassword"]);
         $repeatPassword = htmlspecialchars($_POST["repeatPassword"]);
@@ -52,14 +52,14 @@ class UserController {
             $error = true;
         }
 
-        $userResult = $this->userModel->checkUser($username);
+        $userResult = $this->userModel->checkUsername($username);
         if ($userResult) {
             echo "<h2>Username already taken!</h2>";
             $error = true;
         }
             
         if (!$error) {
-            $result = $this->userModel->register($username, $password);
+            $result = $this->userModel->insert($username, $password);
             $tableResult = $this->userModel->createTable($username);
             if ($result && $tableResult) {
                 session_start();
@@ -70,6 +70,16 @@ class UserController {
             else {
                 die("<h2>SQL Error!</h2>");
             }
+        }
+    }
+
+    public function delete() {
+        $result = $this->userModel->remove($_SESSION["username"]);
+        if ($result) {
+            $this->logout();
+        }
+        else {
+            die("<h2>SQL Error!</h2>");
         }
     }
 

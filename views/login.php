@@ -14,10 +14,7 @@
             <input type="password" name="password" placeholder="Password:">
             
             <button>Login</button>
-        </form>
-
-        <form action=<?php echo htmlspecialchars("registration.php"); ?> method="get">
-            <button>Don't have an account? Sign up!</button>
+            <button name="regButton">Don't have an account? Sign up!</button>
         </form>
 
     </body>
@@ -29,5 +26,9 @@ require_once "../controllers/user.con.php";
 $controller = new UserController();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $controller->loginUser();
+    if (isset($_POST["regButton"])) {
+        header("Location: registration.php");
+        exit;
+    }
+    $controller->login();
 }

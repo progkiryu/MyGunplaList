@@ -16,10 +16,7 @@
             <input type="password" name="repeatPassword" placeholder="Confirm Password:">
             
             <button>Register</button>
-        </form>
-
-        <form action=<?php echo htmlspecialchars("login.php"); ?> method="get">
-            <button>Back</button>
+            <button name="loginBackButton">Back</button>
         </form>
     </body>
 </html>
@@ -30,5 +27,9 @@ require_once "../controllers/user.con.php";
 $controller = new UserController();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $controller->registerUser();
+    if (isset($_POST["loginBackButton"])) {
+        header("Location: login.php");
+        exit;
+    }
+    $controller->register();
 }

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>MyGunplaList</title>
-        <link rel="stylesheet" href="list.css">
+        <link rel="stylesheet" href="style/list.css">
     </head>
 
     <body>
@@ -20,7 +20,7 @@
 
         <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="get">
             <button name="settingsButton">Settings</button>
-            <button name="loginButton">Logout</button>
+            <button name="logoutButton">Logout</button>
 
         </form>
 
@@ -53,7 +53,7 @@
             </form>
         </div>
 
-        <script src="scripts/list.js"></script>
+        <script src="../scripts/list.js"></script>
     </body>
 </html>
 
@@ -65,7 +65,7 @@ require_once "../controllers/user.con.php";
 $listController = new ListController();
 $userController = new UserController();
 
-if (isset($_GET["loginButton"])) {
+if (isset($_GET["logoutButton"])) {
     $userController->logout();
 }
 
@@ -76,10 +76,12 @@ if (isset($_GET["settingsButton"])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["deleteButton"])) {
-        $listController->removeGunpla();
+        $listController->deleteGunpla();
     }
 
     if (isset($_POST["addButton"])) {
         $listController->addGunpla();
     }
 } 
+
+$listController->displayGunpla();

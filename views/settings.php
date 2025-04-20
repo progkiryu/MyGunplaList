@@ -18,37 +18,28 @@
         <h1>Settings.</h1>
 
         <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post">
-            <button>Delete Account</button>
+            <button name="deleteButton">Delete Account</button>
+            <button name="settingsBackButton">Back</button>
         </form>
-
-        <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="get">
-            <button name="settings-back-button">Back</button>
-        </form>
-
-        <?php
-        if (isset($_GET["settings-back-button"])) {
-            header("Location: list.php");
-            exit;
-        }
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            require_once "sqlConnection.php";
-
-            $TBDusername = $_SESSION["username"];
-
-            $userQuery = "DELETE FROM Users WHERE Username = '$TBDusername'";
-            mysqli_query($connection, $userQuery);
-
-            $tableName = $TBDusername . "_gunpla";
-            $tableQuery = "DROP TABLE IF EXISTS $tableName";
-            mysqli_query($connection, $tableQuery);
-
-            session_unset();
-            session_destroy();
-            header("Location: login.php");
-            exit;
-        }
-        ?>
         
     </body>
 </html>
+
+<?php
+
+require_once "../controllers/list.con.php";
+require_once "../controllers/user.con.php";
+
+$listController = new ListController();
+$userController = new UserController();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST["deleteButton"])) {
+        $listController->deleteTable();
+        $userController->delete();
+    }
+    if (isset($_POST["settingsBackButton"])) {
+        header("Location: list.php");
+        exit;
+    }
+}
