@@ -41,8 +41,8 @@ class User {
     }
 
     public function createFolder($username) {
-        $folderName = $username . "_gunpla";
-        $newDirectory = "../gundam photos/" . $folderName;
+        $tableName = $username . "_gunpla";
+        $newDirectory = "../gundam photos/" . $tableName;
         if (!is_dir($newDirectory)) {
             mkdir($newDirectory, 0777, true);
             return true;
@@ -61,7 +61,30 @@ class User {
     }
 
     public function remove($username) {
+        $folderResult = $this->removeTable($username);
+        if (!$folderResult) {
+            return false;
+        }
+
         $statement = $this->database->prepare("DELETE FROM Users WHERE Username = ?");
         return $statement->execute([$username]);
+    }
+    
+    public function removeTable($username) {
+        $tableName = $username . "_gunpla";
+        $directory = "../gundam photos/" . $tableName; 
+        
+        if (!is_dir($directory)) {
+            return false;
+        }
+        
+        $files = scandir($directory);
+        foreach ($files as $file) {
+            if ($file === "." || $file === "..") continue;
+            $filePath = $directory . "/" . $file;
+            unlink($filePath);
+        } 
+        
+        return rmdir($directory);
     }
 }

@@ -50,7 +50,7 @@
                 <input type="text" name="modelName" placeholder="Model Name:">
                 <input type="date" name="dateBuilt">
                 <input type="file" name="photo" accept=".jpg, .jpeg, .png">
-                <button name="addButton">Enter</button>
+                <button name="addButton" type="submit">Enter</button>
             </form>
         </div>
 

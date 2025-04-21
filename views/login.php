@@ -14,7 +14,7 @@
             <input type="password" name="password" placeholder="Password:">
             
             <button>Login</button>
-            <button name="regButton">Don't have an account? Sign up!</button>
+            <button name="regButton" type="submit">Don't have an account? Sign up!</button>
         </form>
 
     </body>

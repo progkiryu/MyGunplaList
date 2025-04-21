@@ -29,6 +29,16 @@ class ListModel {
     }
     
     public function remove($rowID) {
+        $photoStatement = $this->database->prepare("SELECT ImageFileName FROM $this->tableName WHERE ModelName = ?");
+        $photoStatement->execute([$rowID]);
+        $fileResult = $photoStatement->fetchAll(PDO::FETCH_ASSOC);
+        if (count($fileResult) == 1) {
+            $photoResult = $this->removePhoto($fileResult[0]['ImageFileName']);
+            if (!$photoResult) {
+                return false;
+            }
+        }
+
         $deleteGunplaQuery = "DELETE FROM $this->tableName WHERE ModelName = ?";
         $statement = $this->database->prepare($deleteGunplaQuery);
         return $statement->execute([$rowID]);
@@ -36,8 +46,17 @@ class ListModel {
 
     public function removeTable() {
         $deleteTableQuery = "DROP TABLE $this->tableName";
-        $statement = $this->database->prepare($deleteTableQuery);
-        return $statement->execute();
+        return $this->database->query($deleteTableQuery);
+    }
+
+    public function removePhoto($file) {
+        $fileDirectory = "../gundam photos/" . $this->tableName . "/" . $file;
+        if (file_exists($fileDirectory)) {
+            if (unlink($fileDirectory)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getAll() {

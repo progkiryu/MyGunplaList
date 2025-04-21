@@ -24,16 +24,15 @@ class ListController {
             $error = true;
         } 
 
-        if (isset($_FILES["photo"]) && $_FILES["photo"]["error"] === UPLOAD_ERR_OK) {
-            $imageResult = $this->listModel->addPhoto($_FILES["photo"]);
-            if (!$imageResult) {
-                echo "<h2>Error uploading file!</h2>";
-                $error = true;
-            }
-            $image = $_FILES["photo"]["name"];
-        }
-
         if (!$error) {
+            if (isset($_FILES["photo"]) && $_FILES["photo"]["error"] === UPLOAD_ERR_OK) {
+                $imageResult = $this->listModel->addPhoto($_FILES["photo"]);
+                if (!$imageResult) {
+                    die("<h2>Error uploading file!</h2>");
+                }
+                $image = $_FILES["photo"]["name"];
+            }
+
             $result = $this->listModel->add($gradeSelector, $scaleSelector, $modelName, 
             $dateBuilt, $image);
             if (!$result) {
@@ -64,8 +63,8 @@ class ListController {
                     <tr>
                         <th>Grade</th>
                         <th>Scale</th>
-                        <th>ModelName</th>
-                        <th>DateBuilt</th>
+                        <th>Model Name</th>
+                        <th>Date Built</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>";

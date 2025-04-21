@@ -15,7 +15,7 @@
             <input type="password" name="newPassword" placeholder="New Password:">
             <input type="password" name="repeatPassword" placeholder="Confirm Password:">
             
-            <button>Register</button>
+            <button type="submit">Register</button>
             <button name="loginBackButton">Back</button>
         </form>
     </body>
