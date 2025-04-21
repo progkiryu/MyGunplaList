@@ -19,6 +19,15 @@ class ListModel {
         return $statement->execute([$grade, $scale, $modelName, $dateBuilt, $file]);
     }
 
+    public function addPhoto($file) {
+        $temp = $file["tmp_name"];
+        $targetDirectory = "../gundam photos/" . $this->tableName . "/" . basename($file["name"]);
+        if (move_uploaded_file($temp, $targetDirectory)) {
+            return true;
+        }
+        return false;
+    }
+    
     public function remove($rowID) {
         $deleteGunplaQuery = "DELETE FROM $this->tableName WHERE ModelName = ?";
         $statement = $this->database->prepare($deleteGunplaQuery);
@@ -40,18 +49,22 @@ class ListModel {
 
         if (count($rows) != 0) {
             foreach ($rows as $row) {
-                $image = $row['ImageFileName'];
-                if (is_null($image)) {
-                    $image = "No image!";
+                $imagePath = $row['ImageFileName'];
+                $directory = "../gundam photos/" . $this->tableName;
+                $error = "this.outerHTML='<p>No image!</p>';";
+                if (!is_null($imagePath)) {
+                    $directory = $directory . "/" . $imagePath;
                 }
                 $line = '<tr>
                             <td>' . $row['Grade'] . '</td>
                             <td>' . $row['Scale'] . '</td>
                             <td>' . $row['ModelName'] . '</td>
                             <td>' . $row['DateBuilt'] . '</td>
-                            <td>' . $image . '</td>
                             <td>
-                                <form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="post">
+                                <img src="' . $directory . '" onerror="' . $error . '">
+                            </td>
+                            <td>
+                                <form action="' . htmlspecialchars("list.php") . '" method="post">
                                     <button name="deleteButton" value="' . urlencode($row['ModelName']) . '">Delete</button>
                                     <button name="changeButton" value="' . urlencode($row['ModelName']) . '">Edit</button>
                                 </form>

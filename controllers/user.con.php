@@ -60,7 +60,8 @@ class UserController {
         if (!$error) {
             $result = $this->userModel->insert($username, $password);
             $tableResult = $this->userModel->createTable($username);
-            if ($result && $tableResult) {
+            $folderResult = $this->userModel->createFolder($username);
+            if ($result && $tableResult && $folderResult) {
                 session_start();
                 $_SESSION["username"] = $username;
                 header("Location: list.php");

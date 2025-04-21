@@ -40,6 +40,16 @@ class User {
         return $statement->execute();
     }
 
+    public function createFolder($username) {
+        $folderName = $username . "_gunpla";
+        $newDirectory = "../gundam photos/" . $folderName;
+        if (!is_dir($newDirectory)) {
+            mkdir($newDirectory, 0777, true);
+            return true;
+        }
+        return false;
+    }
+
     public function checkUsername($username) {
         $statement = $this->database->prepare("SELECT * FROM Users WHERE Username = ?");
         $statement->execute([$username]);

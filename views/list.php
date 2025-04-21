@@ -27,7 +27,8 @@
         <button id="displayButton" onclick="toggleDisplay(this)">Add Gunpla</button>
 
         <div id="addGunplaDisplay" hidden="hidden">
-            <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post">
+            <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="post" 
+                enctype="multipart/form-data">
                 <select name="gradeSelector">
                     <option value="SD">SD</option>
                     <option value="HG">HG</option>
@@ -48,7 +49,7 @@
                 </select>
                 <input type="text" name="modelName" placeholder="Model Name:">
                 <input type="date" name="dateBuilt">
-                <input type="file" name="photo" accept=".png, .jpeg, .jpg">
+                <input type="file" name="photo" accept=".jpg, .jpeg, .png">
                 <button name="addButton">Enter</button>
             </form>
         </div>
