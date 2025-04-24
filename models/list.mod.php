@@ -44,12 +44,12 @@ class ListModel {
         return $statement->execute([$rowID]);
     }
 
-    private function removeTable() {
+    public function removeTable() {
         $deleteTableQuery = "DROP TABLE $this->tableName";
         return $this->database->query($deleteTableQuery);
     }
 
-    public function removePhoto($file) {
+    private function removePhoto($file) {
         $fileDirectory = "../gundam photos/" . $this->tableName . "/" . $file;
         if (file_exists($fileDirectory)) {
             if (unlink($fileDirectory)) {
