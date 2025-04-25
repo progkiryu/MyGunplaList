@@ -19,6 +19,13 @@ class ListModel {
         return $statement->execute([$grade, $scale, $modelName, $dateBuilt, $file]);
     }
 
+    public function update($grade, $scale, $modelName, $dateBuilt, $file) {
+        $updateQuery = "UPDATE $this->tableName
+                        SET ModelName = ?, Grade = ?, Scale = ?, DateBuilt = ?, ImageFileName = ?";
+        $updateStatement = $this->database->prepare($updateQuery);
+        return $updateStatement->execute([$modelName, $grade, $scale, $dateBuilt, $file]);
+    }
+
     public function addPhoto($file) {
         $temp = $file["tmp_name"];
         $targetDirectory = "../gundam photos/" . $this->tableName . "/" . basename($file["name"]);
@@ -32,7 +39,7 @@ class ListModel {
         $photoStatement = $this->database->prepare("SELECT ImageFileName FROM $this->tableName WHERE ModelName = ?");
         $photoStatement->execute([$rowID]);
         $fileResult = $photoStatement->fetchAll(PDO::FETCH_ASSOC);
-        if (count($fileResult) == 1) {
+        if ($fileResult[0] === NULL) {
             $photoResult = $this->removePhoto($fileResult[0]['ImageFileName']);
             if (!$photoResult) {
                 return false;
@@ -85,8 +92,8 @@ class ListModel {
                             <td>
                                 <form action="' . htmlspecialchars("list.php") . '" method="post">
                                     <button name="deleteButton" value="' . urlencode($row['ModelName']) . '">Delete</button>
-                                    <button name="changeButton" value="' . urlencode($row['ModelName']) . '">Edit</button>
                                 </form>
+                                <button onclick="editRow(this)">Edit</button>
                             </td>
                         </tr>';
                 $array[] = $line;

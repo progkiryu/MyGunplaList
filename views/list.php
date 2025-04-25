@@ -79,9 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["deleteButton"])) {
         $listController->deleteGunpla();
     }
-
     if (isset($_POST["addButton"])) {
-        $listController->addGunpla();
+        $listController->addGunpla(0);
+    }
+    if (isset($_POST["saveButton"])) {
+        $listController->addGunpla(1);
     }
 } 
 

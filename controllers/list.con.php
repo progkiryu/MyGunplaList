@@ -9,7 +9,7 @@ class ListController {
         $this->listModel = new ListModel($_SESSION["username"]);
     }
 
-    public function addGunpla() {
+    public function addGunpla($mode) {
         $gradeSelector = htmlspecialchars($_POST["gradeSelector"]);
         $scaleSelector = htmlspecialchars($_POST["scaleSelector"]);
         $modelName = htmlspecialchars($_POST["modelName"]);
@@ -33,13 +33,21 @@ class ListController {
                 $image = $_FILES["photo"]["name"];
             }
 
-            $result = $this->listModel->add($gradeSelector, $scaleSelector, $modelName, 
-            $dateBuilt, $image);
+            $result = 0;
+            if ($mode === 0) {
+                $result = $this->listModel->add($gradeSelector, $scaleSelector, $modelName, 
+                $dateBuilt, $image);
+            }
+            else if ($mode === 1) {
+                $result = $this->listModel->update($gradeSelector, $scaleSelector, $modelName,
+                $dateBuilt, $image);
+            }
             if (!$result) {
                 die("<h2>SQL Error!</h2>");
             }
         }
     }
+
 
     public function deleteGunpla() {
         $deleteRow = urldecode($_POST["deleteButton"]);

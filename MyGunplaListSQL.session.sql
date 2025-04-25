@@ -1,2 +1,1 @@
-drop table tojo_gunpla;
-delete from users;
+select * from tojo_gunpla

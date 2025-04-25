@@ -29,12 +29,12 @@ class User {
         $newTableName = $username . "_gunpla";
         $query = "CREATE TABLE $newTableName (
             GunplaID INT NOT NULL AUTO_INCREMENT,
-            ModelName VARCHAR(255) NOT NULL,
+            ModelName VARCHAR(255),
             Grade VARCHAR(4),
             Scale VARCHAR(5),
             DateBuilt DATE,
             ImageFileName VARCHAR(255),
-            CONSTRAINT PK_$newTableName PRIMARY KEY (GunplaID, ModelName)
+            CONSTRAINT PK_$newTableName PRIMARY KEY (GunplaID)
         )";
         $statement = $this->database->prepare($query);
         return $statement->execute();
