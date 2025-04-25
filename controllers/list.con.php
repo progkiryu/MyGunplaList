@@ -39,8 +39,9 @@ class ListController {
                 $dateBuilt, $image);
             }
             else if ($mode === 1) {
+                $rowID = $_POST["editButton"];
                 $result = $this->listModel->update($gradeSelector, $scaleSelector, $modelName,
-                $dateBuilt, $image);
+                $dateBuilt, $image, $rowID);
             }
             if (!$result) {
                 die("<h2>SQL Error!</h2>");
@@ -51,6 +52,7 @@ class ListController {
 
     public function deleteGunpla() {
         $deleteRow = urldecode($_POST["deleteButton"]);
+        echo $deleteRow;
         $result = $this->listModel->remove($deleteRow);
         if (!$result) {
             die("<h2>SQL Error!</h2>");

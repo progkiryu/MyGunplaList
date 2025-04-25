@@ -19,11 +19,12 @@ class ListModel {
         return $statement->execute([$grade, $scale, $modelName, $dateBuilt, $file]);
     }
 
-    public function update($grade, $scale, $modelName, $dateBuilt, $file) {
+    public function update($grade, $scale, $modelName, $dateBuilt, $file, $rowID) {
         $updateQuery = "UPDATE $this->tableName
-                        SET ModelName = ?, Grade = ?, Scale = ?, DateBuilt = ?, ImageFileName = ?";
+                        SET ModelName = ?, Grade = ?, Scale = ?, DateBuilt = ?, ImageFileName = ?
+                        WHERE GunplaID = ?";
         $updateStatement = $this->database->prepare($updateQuery);
-        return $updateStatement->execute([$modelName, $grade, $scale, $dateBuilt, $file]);
+        return $updateStatement->execute([$modelName, $grade, $scale, $dateBuilt, $file, $rowID]);
     }
 
     public function addPhoto($file) {
@@ -36,7 +37,7 @@ class ListModel {
     }
     
     public function remove($rowID) {
-        $photoStatement = $this->database->prepare("SELECT ImageFileName FROM $this->tableName WHERE ModelName = ?");
+        $photoStatement = $this->database->prepare("SELECT ImageFileName FROM $this->tableName WHERE GunplaID = ?");
         $photoStatement->execute([$rowID]);
         $fileResult = $photoStatement->fetchAll(PDO::FETCH_ASSOC);
         if ($fileResult[0] === NULL) {
@@ -46,7 +47,7 @@ class ListModel {
             }
         }
 
-        $deleteGunplaQuery = "DELETE FROM $this->tableName WHERE ModelName = ?";
+        $deleteGunplaQuery = "DELETE FROM $this->tableName WHERE GunplaID = ?";
         $statement = $this->database->prepare($deleteGunplaQuery);
         return $statement->execute([$rowID]);
     }
@@ -91,9 +92,9 @@ class ListModel {
                             </td>
                             <td>
                                 <form action="' . htmlspecialchars("list.php") . '" method="post">
-                                    <button name="deleteButton" value="' . urlencode($row['ModelName']) . '">Delete</button>
+                                    <button name="deleteButton" value="' . urlencode($row['GunplaID']) . '">Delete</button>
                                 </form>
-                                <button onclick="editRow(this)">Edit</button>
+                                <button onclick="editRow(this)" value="' . urlencode($row['GunplaID']) . '">Edit</button>
                             </td>
                         </tr>';
                 $array[] = $line;

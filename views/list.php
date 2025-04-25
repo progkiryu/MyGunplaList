@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["addButton"])) {
         $listController->addGunpla(0);
     }
-    if (isset($_POST["saveButton"])) {
+    if (isset($_POST["editButton"])) {
         $listController->addGunpla(1);
     }
 } 

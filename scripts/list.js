@@ -46,7 +46,7 @@ function editRow(button) {
         cells[4].innerHTML = `<input type="file" name="photo" accept=".jpg, .jpeg, .png">`;
 
         button.textContent = "Save";
-        button.setAttribute("name", "saveButton");
+        button.setAttribute("name", "editButton");
     }
     else {
         const form = document.createElement("form");
@@ -56,5 +56,6 @@ function editRow(button) {
         
         row.parentNode.insertBefore(form, row);
         form.appendChild(row);
+        console.log(button.value);
     }
 }
