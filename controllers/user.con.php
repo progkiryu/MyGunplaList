@@ -46,6 +46,23 @@ class UserController {
             $error = true;
         }
 
+        $number = preg_match("/\d/", $password);
+        $specialChar = preg_match('/[!@#$%^&*()-=_+[]{};":,./<>?/', $password);
+
+        if (strlen($password) >= 10) {
+            echo "<h2>Password must be at least 10 words long!</h2>";
+            $error = true;
+        }
+
+        if (!$number) {
+            echo "<h2>Password needs at least 1 number!</h2>";
+            $error = true;
+        }
+
+        if (!$specialChar) {
+            echo "<h2>Password needs at least 1 special character!</h2>";
+        }
+
         if ($repeatPassword != $password) {
             echo "<h2>Confirm the password!</h2>";
             $error = true;

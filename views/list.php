@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        
         <title>MyGunplaList</title>
         <link rel="stylesheet" href="style/list.css">
     </head>

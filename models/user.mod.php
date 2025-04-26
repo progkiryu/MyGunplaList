@@ -61,7 +61,7 @@ class User {
     }
 
     public function remove($username) {
-        $folderResult = $this->removeTable($username);
+        $folderResult = $this->removeFolder($username);
         if (!$folderResult) {
             return false;
         }
@@ -70,7 +70,7 @@ class User {
         return $statement->execute([$username]);
     }
     
-    public function removeTable($username) {
+    private function removeFolder($username) {
         $tableName = $username . "_gunpla";
         $directory = "../gundam photos/" . $tableName; 
         

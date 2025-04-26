@@ -55,6 +55,5 @@ function editRow(button) {
         
         row.parentNode.insertBefore(form, row);
         form.appendChild(row);
-        console.log(button.value);
     }
 }
