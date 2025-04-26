@@ -26,7 +26,6 @@ class ListModel {
         $updateStatement = $this->database->prepare($updateQuery);
         $updateResult = $updateStatement->execute([$modelName, $grade, $scale, $dateBuilt, $rowID]);
         
-        $updatePhotoResult = true;
         if ($file !== NULL) {
             $photoResult = $this->searchPhoto($rowID);
             if ($photoResult) {
@@ -35,18 +34,28 @@ class ListModel {
                     return false;
                 }
             }
+            else {
+                return false;
+            }
 
-            $updatePhotoQuery = "UPDATE $this->tableName
-                           SET ImageFileName = ?
-                           WHERE GunplaID = ?";
-            $updatePhotoStatement = $this->database->prepare($updatePhotoQuery);
-            $updatePhotoResult = $updatePhotoStatement->execute([$file, $rowID]);
+            $updatePhotoResult = $this->updatePhoto($file, $rowID);
+            if (!$updatePhotoResult) {
+                return false;
+            }
         }
 
-        if ($updateResult && $updatePhotoResult) {
+        if ($updateResult) {
             return true;
         }
         return false;
+    }
+
+    private function updatePhoto($file, $rowID) {
+        $updatePhotoQuery = "UPDATE $this->tableName
+                             SET ImageFileName = ?
+                             WHERE GunplaID = ?";
+        $updatePhotoStatement = $this->database->prepare($updatePhotoQuery);
+        return $updatePhotoStatement->execute([$file, $rowID]);
     }
 
     public function addPhoto($file) {
