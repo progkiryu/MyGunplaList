@@ -1,5 +1,30 @@
-table, td, th {
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+table {
+    border: 2px solid;
+    border-collapse: collapse;
+} 
+
+td, th {
     border: 2px solid;
     border-collapse: collapse;
     text-align: center;
-} 
+    width: 200px;
+}
+
+img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}

@@ -47,7 +47,7 @@ class UserController {
         }
 
         $number = preg_match("/\d/", $password);
-        $specialChar = preg_match('/[!@#$%^&*()-=_+[]{};":,./<>?/', $password);
+        $specialChar = preg_match('/[!@#$%^&*()-=_+[]{};":,.<>?/', $password);
 
         if (strlen($password) >= 10) {
             echo "<h2>Password must be at least 10 words long!</h2>";

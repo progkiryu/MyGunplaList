@@ -34,9 +34,6 @@ class ListModel {
                     return false;
                 }
             }
-            else {
-                return false;
-            }
 
             $updatePhotoResult = $this->updatePhoto($file, $rowID);
             if (!$updatePhotoResult) {
