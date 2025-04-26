@@ -46,7 +46,6 @@ function editRow(button) {
         cells[4].innerHTML = `<input type="file" name="photo" accept=".jpg, .jpeg, .png">`;
 
         button.textContent = "Save";
-        button.setAttribute("name", "editButton");
     }
     else {
         const form = document.createElement("form");

@@ -21,10 +21,32 @@ class ListModel {
 
     public function update($grade, $scale, $modelName, $dateBuilt, $file, $rowID) {
         $updateQuery = "UPDATE $this->tableName
-                        SET ModelName = ?, Grade = ?, Scale = ?, DateBuilt = ?, ImageFileName = ?
+                        SET ModelName = ?, Grade = ?, Scale = ?, DateBuilt = ?
                         WHERE GunplaID = ?";
         $updateStatement = $this->database->prepare($updateQuery);
-        return $updateStatement->execute([$modelName, $grade, $scale, $dateBuilt, $file, $rowID]);
+        $updateResult = $updateStatement->execute([$modelName, $grade, $scale, $dateBuilt, $rowID]);
+        
+        $updatePhotoResult = true;
+        if ($file !== NULL) {
+            $photoResult = $this->searchPhoto($rowID);
+            if ($photoResult) {
+                $deletePhotoResult = $this->removePhoto($photoResult);
+                if (!$deletePhotoResult) {
+                    return false;
+                }
+            }
+
+            $updatePhotoQuery = "UPDATE $this->tableName
+                           SET ImageFileName = ?
+                           WHERE GunplaID = ?";
+            $updatePhotoStatement = $this->database->prepare($updatePhotoQuery);
+            $updatePhotoResult = $updatePhotoStatement->execute([$file, $rowID]);
+        }
+
+        if ($updateResult && $updatePhotoResult) {
+            return true;
+        }
+        return false;
     }
 
     public function addPhoto($file) {
@@ -37,12 +59,10 @@ class ListModel {
     }
     
     public function remove($rowID) {
-        $photoStatement = $this->database->prepare("SELECT ImageFileName FROM $this->tableName WHERE GunplaID = ?");
-        $photoStatement->execute([$rowID]);
-        $fileResult = $photoStatement->fetchAll(PDO::FETCH_ASSOC);
-        if ($fileResult[0] === NULL) {
-            $photoResult = $this->removePhoto($fileResult[0]['ImageFileName']);
-            if (!$photoResult) {
+        $photoResult = $this->searchPhoto($rowID);
+        if ($photoResult) {
+            $deletePhotoResult = $this->removePhoto($photoResult);
+            if (!$deletePhotoResult) {
                 return false;
             }
         }
@@ -63,6 +83,16 @@ class ListModel {
             if (unlink($fileDirectory)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private function searchPhoto($rowID) {
+        $photoStatement = $this->database->prepare("SELECT ImageFileName FROM $this->tableName WHERE GunplaID = ?");
+        $photoStatement->execute([$rowID]);
+        $fileResult = $photoStatement->fetchAll(PDO::FETCH_ASSOC);
+        if ($fileResult[0] !== NULL) {
+            return $fileResult[0]['ImageFileName'];
         }
         return false;
     }
@@ -92,9 +122,9 @@ class ListModel {
                             </td>
                             <td>
                                 <form action="' . htmlspecialchars("list.php") . '" method="post">
-                                    <button name="deleteButton" value="' . urlencode($row['GunplaID']) . '">Delete</button>
+                                    <button name="deleteButton" value="' . $row['GunplaID'] . '">Delete</button>
                                 </form>
-                                <button onclick="editRow(this)" value="' . urlencode($row['GunplaID']) . '">Edit</button>
+                                <button name="editButton" onclick="editRow(this)" value="' . $row['GunplaID'] . '">Edit</button>
                             </td>
                         </tr>';
                 $array[] = $line;

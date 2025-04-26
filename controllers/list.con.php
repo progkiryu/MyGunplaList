@@ -51,8 +51,7 @@ class ListController {
 
 
     public function deleteGunpla() {
-        $deleteRow = urldecode($_POST["deleteButton"]);
-        echo $deleteRow;
+        $deleteRow = $_POST["deleteButton"];
         $result = $this->listModel->remove($deleteRow);
         if (!$result) {
             die("<h2>SQL Error!</h2>");
